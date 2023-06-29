@@ -1,9 +1,5 @@
-class Node {
-    constructor(value) {
-        this.value = value;
-        this.left = null;
-        this.right = null;
-    }
+const Node = (value = null, left = null, right = null) => {
+    return {value, left, right}
 }
 
 module.exports = Node;
