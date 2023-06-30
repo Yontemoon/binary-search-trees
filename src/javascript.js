@@ -70,13 +70,14 @@ class Tree {
   }
   
   find (value, currentNode = this.root) {
-    if (currentNode === null || currentNode.value === value) return currentNode;
+    if (currentNode === null) return null;
 
     if (currentNode.value > value) {
       return this.find(value, currentNode.left);
     } else if( currentNode.value < value) {
       return this.find(value, currentNode.right);
     } 
+    return currentNode;
   }
 
 
@@ -129,6 +130,25 @@ class Tree {
     return result;
   }
 
+
+  //why return -1??
+  height (node = this.root) {
+    if (node === null) return -1;
+    let leftHeight = this.height(node.left);
+    let rightHeight = this.height(node.right);
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  depth(node, root = this.root, level = 0) {
+    if (!node) return null;
+    if (root === null) return 0;
+    if (root.value === node.value) return level;
+    let count = this.depth(node, root.left, level + 1);
+    if (count !== 0) return count;
+    return this.depth(node, root.right, level + 1);
+  }
+
+
   
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -147,12 +167,12 @@ class Tree {
 
 
 
-let array1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+let array1 = [4, 2, 3, 1]
 const tree = new Tree(array1);
 console.log(tree)
-tree.prettyPrint();
-tree.insert(24)
+tree.insert(5)
 tree.prettyPrint();
 tree.levelOrder();
 console.log(tree.preorder())
+console.log(tree.depth(tree.find(1)));
 
