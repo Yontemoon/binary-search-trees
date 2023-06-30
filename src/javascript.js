@@ -79,27 +79,55 @@ class Tree {
     } 
   }
 
-  levelOrder (callBack) {
+
+  // WTF review this!!!
+  levelOrder (callback) {
     let current = this.root;
     const queue = [current];
     const result = [];
-    console.log(current)
     while (queue.length > 0) {
-      result.push(queue);
-      queue.splice(0,1)
-      if (current.left) {
-        queue.push(current.left);
-      }
-      if(current.right) {
-        queue.push(current.right);
-        current = queue[0];
-      }
+      current = queue.shift();
+      callback ? callback(current) : result.push(current.value);
+
+      const enqueueList = [current?.left, current?.right].filter((value) => value);
+      queue.push(...enqueueList);
+      
     }
-    if(callBack) return callBack(result);
     return result;
-
     }
 
+
+    // wtf are these callbacks for?
+  inorder (callback, current = this.root, result = []) {
+    
+    if(current === null) return;
+
+    this.inorder(callback, current.left, result);
+    callback ? callback(current) : result.push(current.value);
+    this.inorder(callback, current.right, result);
+    return result;
+  }
+
+  postorder (callback, current = this.root, result = []) {
+    if(current === null) return;
+
+    this.inorder(callback, current.right, result);
+
+    callback ? callback(current) : result.push(current.value);
+    this.inorder(callback, current.left, result);
+    console.log(result);
+    return result;
+  }
+
+  preorder (callback, current = this.root, result = []) {
+    if(current === null) return;
+
+    callback ? callback(current) : result.push(current.value);
+
+    this.preorder(callback, current.left, result);
+    this.preorder(callback, current.right, result);
+    return result;
+  }
 
   
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
@@ -125,6 +153,6 @@ console.log(tree)
 tree.prettyPrint();
 tree.insert(24)
 tree.prettyPrint();
-tree.delete(67);
-tree.prettyPrint();
-console.log(tree.levelOrder());
+tree.levelOrder();
+console.log(tree.preorder())
+
