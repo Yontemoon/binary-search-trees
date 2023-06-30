@@ -34,7 +34,9 @@ class Tree {
     return currentNode;
   }
 
-  delete (value, currentNode = this.root) {
+
+  //Come back to this to full grasp it. 
+  delete (value, currentNode = this.root) { 
     if (currentNode === null) return currentNode;
     if (currentNode.value === value) {
       currentNode = this.#removeNode(currentNode);
@@ -66,7 +68,39 @@ class Tree {
     }
     return currentNode;
   }
-    
+  
+  find (value, currentNode = this.root) {
+    if (currentNode === null || currentNode.value === value) return currentNode;
+
+    if (currentNode.value > value) {
+      return this.find(value, currentNode.left);
+    } else if( currentNode.value < value) {
+      return this.find(value, currentNode.right);
+    } 
+  }
+
+  levelOrder (callBack) {
+    let current = this.root;
+    const queue = [current];
+    const result = [];
+    console.log(current)
+    while (queue.length > 0) {
+      result.push(queue);
+      queue.splice(0,1)
+      if (current.left) {
+        queue.push(current.left);
+      }
+      if(current.right) {
+        queue.push(current.right);
+        current = queue[0];
+      }
+    }
+    if(callBack) return callBack(result);
+    return result;
+
+    }
+
+
   
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -86,7 +120,6 @@ class Tree {
 
 
 let array1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-console.log(array1)
 const tree = new Tree(array1);
 console.log(tree)
 tree.prettyPrint();
@@ -94,3 +127,4 @@ tree.insert(24)
 tree.prettyPrint();
 tree.delete(67);
 tree.prettyPrint();
+console.log(tree.levelOrder());
