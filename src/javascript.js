@@ -148,6 +148,18 @@ class Tree {
     return this.depth(node, root.right, level + 1);
   }
 
+  isBalanced (node = this.root) {
+    if (node === null) return true;
+    const heightDiff = Math.abs(this.height(node.left) - this.height(node.right));
+    return ((heightDiff <= 1) && (this.isBalanced(node.left)) && (this.isBalanced(node.right)))
+  }
+
+  rebalance () {
+    if (this.root === null) return;
+    const sorted = [...new Set (this.inorder().sort((a,b) => a - b))]
+    this.root = this.buildTree(sorted);
+  }
+
 
   
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
@@ -171,8 +183,13 @@ let array1 = [4, 2, 3, 1]
 const tree = new Tree(array1);
 console.log(tree)
 tree.insert(5)
+tree.insert(24);
+tree.insert(400);
+tree.insert(20);
+tree.insert(23);
 tree.prettyPrint();
 tree.levelOrder();
 console.log(tree.preorder())
-console.log(tree.depth(tree.find(1)));
-
+console.log(tree.isBalanced())
+console.log(tree.height(tree.find(3)))
+console.log(tree.isBalanced())
